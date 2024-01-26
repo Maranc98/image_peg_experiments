@@ -2,8 +2,8 @@ This webpage contains the results of experiments on PEG when applied to pixel in
 Note that the goal sampling strategy used for pixel inputs is not MPPI. 
 Goals are sampled from the replay buffer and the goal with the highest exploratory value is used.
 
-PEG was trained on two different environments: 3-Block Stacking, NES Super Mario Bros.\\
-For the 3-Block Stacking environment, Image PEG, Image LEXA and Vector PEG are compared.\\
+PEG was trained on two different environments: 3-Block Stacking, NES Super Mario Bros.\
+For the 3-Block Stacking environment, Image PEG, Image LEXA and Vector PEG are compared.\
 For the NES Super Mario Bros environment only Image PEG is trained.
 
 # 3-Block Stacking
@@ -19,11 +19,11 @@ For the NES Super Mario Bros environment only Image PEG is trained.
 
   Image PEG
 
-  ![GC behaviour](/docs/videos/ts_peg_6M.gif?raw=true)
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_peg_6M.gif" width=960px>
 
   Image LEXA
 
-  ![GC behaviour](/docs/videos/ts_lexa_6M.gif?raw=true)
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_lexa_6M.gif" width=960px>
 
   Vector PEG
 
@@ -37,26 +37,39 @@ For the NES Super Mario Bros environment only Image PEG is trained.
 
   Image PEG
 
-  ![WM error](/docs/videos/ts_peg_6M_wm.gif)
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_peg_6M_wm.gif">
 
   Image LEXA
   
-  ![WM error](/docs/videos/ts_lexa_6M_wm.gif)
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_lexa_6M_wm.gif">
 
 # NES Super Mario Bros
 Unless specified, videos refer to the agent behaviour after 10M training steps.
 
 ## Goal conditioned behaviour
-
-  ![GC behaviour](/docs/videos/mario_10M.gif)
+  Agent behaviour is observed when tasked with achieving a set of predefined goals.
+  
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M.gif">
 
 ## World model error
 
-  ![WM error](/docs/videos/mario_10M_wm.gif)
+  This video shows the world model errors.
+  Some notable errors are the desync of the level horizontal scrolling.
+  Changes in agent speed, or colliding with walls is not always correctly predicted by the model.
+
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M_wm.gif">
 
 ## Training policy observation
   Observation of the Go-Explore mechanism of the agent at 5M and 10M steps.
-  
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_5M_goexp.gif" width=320px>
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M_goexp.gif" width=320px>
+  The agent first attempts to achieve a chosen goal, then explores from the reached position.
+  The following videos show the agent behaviour at 5M and 10M training steps respectively.
 
+  | 5M steps | 10M steps |
+  | --- | --- |
+  | <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_5M_goexp.gif" width=320px> | <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M_goexp.gif" width=320px> |
+
+  The agent chooses far goals to achieve high exploratory value, and then continues exploring to the right. \
+  Later iterations seem to focus on colliding with walls instead. 
+  Indeed, the effect of these collisions is difficult to model, and may correspond to high epistemic uncertainty/exploratory value for the agent.
+
+  Moreover, in the 10M step video the agent has learned how to control the game camera to decenter Mario from the screen, adding another layer of complexity for computing collision and subsequent scrolling speed changes.
