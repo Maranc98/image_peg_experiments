@@ -17,17 +17,11 @@ For the NES Super Mario Bros environment only Image PEG is trained.
 
 ## Goal conditioned behaviour
 
-  Image PEG
-
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_peg_6M.gif" width=960px>
-
-  Image LEXA
-
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_lexa_6M.gif" width=960px>
-
-  Vector PEG
-
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_vecpeg_1M.gif" width=960px>
+  | Model | Behaviour |
+  |---|---|
+  | Image PEG | <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_peg_6M.gif" width=960px> |
+  | Image LEXA | <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_lexa_6M.gif" width=960px> |
+  | Vector PEG | <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_vecpeg_1M.gif" width=960px> |
 
 ## World model error
   These videos show the error of the world model predictions. 
@@ -35,13 +29,9 @@ For the NES Super Mario Bros environment only Image PEG is trained.
   Rows top to bottom show ground truth, prediction, and error. 
   Errors mainly concern block dynamics.
 
-  Image PEG
-
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_peg_6M_wm.gif">
-
-  Image LEXA
-  
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_lexa_6M_wm.gif">
+  | Image PEG | Image LEXA|
+  | --- | --- |
+  | <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_peg_6M_wm.gif"> | <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/ts_lexa_6M_wm.gif"> |
 
 # NES Super Mario Bros
 Unless specified, videos refer to the agent behaviour after 10M training steps.
