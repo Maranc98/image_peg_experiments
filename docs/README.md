@@ -49,7 +49,7 @@ Unless specified, videos refer to the agent behaviour after 10M training steps.
 ## Goal conditioned behaviour
   Agent behaviour is observed when tasked with achieving a set of predefined goals.
   
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M.gif">
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M.gif" width=960px>
 
 ## World model error
 
@@ -57,7 +57,7 @@ Unless specified, videos refer to the agent behaviour after 10M training steps.
   Some notable errors are the desync of the level horizontal scrolling.
   Changes in agent speed, or colliding with walls is not always correctly predicted by the model.
 
-  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M_wm.gif">
+  <img src="https://raw.githubusercontent.com/Maranc98/image_peg_experiments/master/docs/videos/mario_10M_wm.gif" width=500px>
 
 ## Training policy observation
   Observation of the Go-Explore mechanism of the agent at 5M and 10M steps.
