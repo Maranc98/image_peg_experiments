@@ -3,4 +3,4 @@ PEG was trained on three different environments: 3-Block Stacking, NES Super Mar
 
 # 3-Block Stacking
 
-![Goal policy](/repository/assets/ts_peg_6M.gif?raw=true "Goal policy")
+![Goal policy](/videos/ts_peg_6M.gif?raw=true "Goal policy")
