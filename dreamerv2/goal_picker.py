@@ -158,7 +158,6 @@ class SubgoalPlanner:
     self.will_update_next_call = True
     self.mega_sample = None
 
-
   def search_goal(self, obs, state=None, mode='train'):
     if self.will_update_next_call is False:
       return self.sample_goal()
@@ -249,14 +248,16 @@ class SubgoalPlanner:
           self.mega_sample = samples
           # since mega only returns 1 goal, repeat it.
           samples = tf.repeat(samples, self.batch, 0)
-        # initialize means states.
-        means, vars = tf.nn.moments(samples, 0)
-        # stds = tf.sqrt(vars + 1e-6)
-        # stds = tf.concat([[0.5, 0.5], stds[2:]], axis=0)
-        # assert np.prod(means.shape) == self.goal_dim, f"{np.prod(means.shape)}, {self.goal_dim}"
-        samples = tfd.MultivariateNormalDiag(means, stds).sample(sample_shape=[self.batch])
-        # print(i, samples)
-        samples = tf.clip_by_value(samples, self.min_action, self.max_action)
+        
+        if self.planner != 'image_planner':
+          # initialize means states.
+          means, vars = tf.nn.moments(samples, 0)
+          # stds = tf.sqrt(vars + 1e-6)
+          # stds = tf.concat([[0.5, 0.5], stds[2:]], axis=0)
+          # assert np.prod(means.shape) == self.goal_dim, f"{np.prod(means.shape)}, {self.goal_dim}"
+          samples = tfd.MultivariateNormalDiag(means, stds).sample(sample_shape=[self.batch])
+          # print(i, samples)
+          samples = tf.clip_by_value(samples, self.min_action, self.max_action)
       else:
         samples = tfd.MultivariateNormalDiag(means, stds).sample(sample_shape=[self.batch])
         samples = tf.clip_by_value(samples, self.min_action, self.max_action)
@@ -282,6 +283,9 @@ class SubgoalPlanner:
         means, vars = tf.nn.moments(elite_samples, 0)
         stds = tf.sqrt(vars + 1e-6)
         # rewards.append(tf.reduce_mean(tf.gather(fitness, elite_inds)).numpy())
+      elif self.planner == 'image_planner':
+        elite_score, elite_inds = tf.nn.top_k(fitness, elite_size, sorted=False)
+        elite_samples = tf.gather(samples, elite_inds)
 
     if self.planner == 'shooting_cem':
       self.vis_fn(elite_inds, elite_samples, seq, self.wm)

@@ -1,4 +1,92 @@
+mario:
+  steps: 6000000
+  task: 'mario'
+  replay: {capacity: 1e5, ongoing: False, minlen: 50, maxlen: 50, prioritize_ends: True, sample_recent: False, recent_episode_threshold: 0, initial_buffer_path: '', initial_buffer_capacity: 5e4, shuffle_blocks: False}
+  dataset: {batch: 16, length: 50}
+  goal_dataset: {batch: 150, length: 50}
+  time_limit: 150
+  disag_models: 3
+  prefill: 50
+  encoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 16, cnn_kernels: [4, 4, 4, 4], mlp_layers: [1, 1, 1, 1]}
+  decoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 16, cnn_kernels: [5, 5, 6, 6], mlp_layers: [1, 1, 1, 1]}
+
+mario_short:
+  task: 'mario'
+  replay: {capacity: 2e5, ongoing: False, minlen: 50, maxlen: 50, prioritize_ends: True, sample_recent: False, recent_episode_threshold: 0, initial_buffer_path: '', initial_buffer_capacity: 1e5, shuffle_blocks: False}
+  dataset: {batch: 16, length: 50}
+  goal_dataset: {batch: 150, length: 50}
+  time_limit: 50
+  disag_models: 10
+  prefill: 50
+  encoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 32, cnn_kernels: [4, 4, 4, 4], mlp_layers: [1, 1, 1, 1]}
+  decoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 32, cnn_kernels: [5, 5, 6, 6], mlp_layers: [1, 1, 1, 1]}
+
+
+zelda:
+  task: 'zelda'
+  replay: {capacity: 2e6, ongoing: False, minlen: 50, maxlen: 50, prioritize_ends: True, sample_recent: False, recent_episode_threshold: 0, initial_buffer_path: '', initial_buffer_capacity: 1e6, shuffle_blocks: False}
+  dataset: {batch: 16, length: 50}
+  goal_dataset: {batch: 150, length: 50}
+  time_limit: 200
+  disag_models: 5
+
+three_stack_image:
+  task: 'three_stack_image'
+  prefill: 50
+  disag_models: 5
+  rssm: {ensemble: 1, hidden: 200, deter: 200, stoch: 50, discrete: 0, act: elu, norm: none, std_act: sigmoid2, min_std: 0.1}
+  encoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 32, cnn_kernels: [4, 4, 4, 4], mlp_layers: [1, 1, 1, 1]}
+  decoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 32, cnn_kernels: [5, 5, 6, 6], mlp_layers: [1, 1, 1, 1]}
+  show_gripper: True
+  steps: 6000000
+
+three_stack_image_easy:
+  task: 'three_stack_image'
+  prefill: 50
+  disag_models: 5
+  rssm: {ensemble: 1, hidden: 200, deter: 200, stoch: 50, discrete: 0, act: elu, norm: none, std_act: sigmoid2, min_std: 0.1}
+  encoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 32, cnn_kernels: [4, 4, 4, 4], mlp_layers: [1, 1, 1, 1]}
+  decoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 32, cnn_kernels: [5, 5, 6, 6], mlp_layers: [1, 1, 1, 1]}
+  #easy_mode: True
+  show_gripper: True
+
+image:
+  task: 'pointmaze'
+  use_image: True
+  encoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 8, cnn_kernels: [4, 4, 4, 4], mlp_layers: [400, 400, 400, 400]}
+  decoder: {mlp_keys: '$^', cnn_keys: 'observation', act: elu, norm: none, cnn_depth: 8, cnn_kernels: [5, 5, 6, 6], mlp_layers: [400, 400, 400, 400]}
+  #goal_strategy: 'SampleReplay'
+  prefill: 50
+  planner: {
+    batch: 500,
+    cem_elite_ratio: 0.2,
+    cost_use_p2e_value: True,
+    # Image change
+    evaluate_only: True,
+    final_step_cost: True,
+    goal_min: [0.0],
+    goal_max: [0.0],
+    horizon: 50,
+    init_candidates: [123456789.0],
+    init_env_goal_percent: 0.0,
+    mega_prior: False,
+    mppi_gamma: 10.0,
+    optimization_steps: 5,
+    planner_type: 'image_planner',
+    repeat_samples: 0,
+    std_scale: 1.0,
+    # Image change
+    sample_replay: True,
+    sample_env_goal_percent: 0.0,
+  }
+
+  replay: {capacity: 2e5, ongoing: False, minlen: 50, maxlen: 50, prioritize_ends: True, sample_recent: False, recent_episode_threshold: 0, initial_buffer_path: '', initial_buffer_capacity: 1e5, shuffle_blocks: False}
+
+
 defaults:
+  use_image: False
+  easy_mode: False
+  show_gripper: True
 
   # Train Script
   logdir: /dev/null

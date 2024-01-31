@@ -1,4 +1,5 @@
 import os
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 # os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import tensorflow as tf
 import dreamerv2.api as dv2
@@ -2509,15 +2510,16 @@ def main():
   print('Logdir', logdir)
 
   """ ========= SETUP ENVIRONMENTS  ========"""
-  env = make_env(config, use_goal_idx=False, log_per_goal=True)
-  eval_env = make_env(config, use_goal_idx=True, log_per_goal=False, eval=True)
-  sample_env_goals = make_sample_env_goals(config, eval_env)
-  report_render_fn = make_report_render_function(config)
-  eval_fn = make_eval_fn(config)
-  plot_fn = make_plot_fn(config)
-  ep_render_fn = make_ep_render_fn(config)
-  cem_vis_fn = make_cem_vis_fn(config)
-  obs2goal_fn = make_obs2goal_fn(config)
+  if not config.use_image:
+    env = make_env(config, use_goal_idx=False, log_per_goal=True)
+    eval_env = make_env(config, use_goal_idx=True, log_per_goal=False, eval=True)
+    sample_env_goals = make_sample_env_goals(config, eval_env)
+    report_render_fn = make_report_render_function(config)
+    eval_fn = make_eval_fn(config)
+    plot_fn = make_plot_fn(config)
+    ep_render_fn = make_ep_render_fn(config)
+    cem_vis_fn = make_cem_vis_fn(config)
+    obs2goal_fn = make_obs2goal_fn(config)
 
   """ ========= SETUP TF2 and GPU ========"""
   tf.config.run_functions_eagerly(not config.jit)
@@ -2532,7 +2534,35 @@ def main():
     prec.set_policy(prec.Policy('mixed_float16'))
 
   """ ========= BEGIN TRAIN ALGORITHM ========"""
-  dv2.train(env, eval_env, eval_fn, report_render_fn, ep_render_fn, plot_fn, cem_vis_fn, obs2goal_fn, sample_env_goals, config)
+  if config.use_image:
+    if config.task == 'pointmaze':
+      from point_maze_2d import PointMaze2DEnvPEG
+      env_wrapper = PointMaze2DEnvPEG(config)
+    elif config.task == 'mario':
+      from mario_env import PEG_SuperMarioBros
+      env_wrapper = PEG_SuperMarioBros(config)
+    elif config.task == 'zelda':
+      from zelda_env import PEG_Zelda
+      env_wrapper = PEG_Zelda(config)
+    elif config.task == 'three_stack_image':
+      from three_stack import ThreeStackEnvPEG
+      env_wrapper = ThreeStackEnvPEG(config)
+
+    dv2.train(
+      env_wrapper.make_env(config, use_goal_idx=False, log_per_goal=True), 
+      env_wrapper.make_env(config, use_goal_idx=True, log_per_goal=False, eval=True), 
+      env_wrapper.eval_fn,
+      env_wrapper.report_render_fn,
+      env_wrapper.episode_render_fn,
+      env_wrapper.plot_fn, 
+      env_wrapper.cem_vis_fn, 
+      env_wrapper.obs2goal_fn, 
+      env_wrapper.sample_env_goals, 
+      config
+    )
+  
+  else:
+    dv2.train(env, eval_env, eval_fn, report_render_fn, ep_render_fn, plot_fn, cem_vis_fn, obs2goal_fn, sample_env_goals, config)
 
 if __name__ == "__main__":
     main()

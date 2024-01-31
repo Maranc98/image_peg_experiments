@@ -17,7 +17,7 @@ class GCAgent(common.Module):
     self.obs_space = obs_space
     goal_dim = np.prod(self.obs_space[self.goal_key].shape)
     self.obs_space.pop(self.goal_key)
-
+    
     self.act_space = act_space['action']
     self.step = step
     self.tfstep = tf.Variable(int(self.step), tf.int64)
@@ -200,7 +200,10 @@ class GCWorldModel(agent.WorldModel):
       out = head(inp)
       dists = out if isinstance(out, dict) else {name: out}
       for key, dist in dists.items():
-        like = tf.cast(dist.log_prob(data[key]), tf.float32)
+        if self.config.use_image:
+          like = tf.cast(dist.log_prob(tf.cast(data[key], dist.dtype)), tf.float32)
+        else:
+          like = tf.cast(dist.log_prob(data[key]), tf.float32)
         likes[key] = like
         losses[key] = -like.mean()
     model_loss = sum(

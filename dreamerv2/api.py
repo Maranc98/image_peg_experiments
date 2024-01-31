@@ -142,6 +142,7 @@ def train(env, eval_env, eval_fn, report_render_fn, ep_render_fn, plot_fn, cem_v
 
   print('Create agent.')
   dataset = iter(replay.dataset(**config.dataset))
+  print('Replay works correctly, made dataset.')
   if config.gcp_train_factor > 1:
     gcp_dataset = iter(replay.dataset(**config.dataset))
   if config.replay.sample_recent:
